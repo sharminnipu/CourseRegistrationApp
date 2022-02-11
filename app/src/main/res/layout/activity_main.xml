@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.avaiable_course.MainActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <RelativeLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:background="@color/my_color"
+            android:layout_height="?attr/actionBarSize">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/select_course"
+                android:textColor="@color/white"
+                android:layout_marginStart="40dp"
+                android:layout_centerInParent="true"
+                android:textStyle="bold"
+                android:textSize="@dimen/title_bar_txt_size"
+                android:layout_alignParentStart="true"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/selectChamber"
+                android:layout_width="wrap_content"
+                android:text="Enrolled"
+                android:paddingLeft="8dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:gravity="center"
+                android:background="@drawable/enrolled_course_shape"
+                android:drawableEnd="@drawable/ic_arrow"
+                android:layout_centerInParent="true"
+                android:textColor="@color/white"
+                android:textStyle="normal"
+                android:layout_marginRight="8dp"
+                android:textSize="12sp"
+                android:layout_alignParentRight="true"
+                android:layout_height="wrap_content"/>
+
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvAvailableCourse"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
