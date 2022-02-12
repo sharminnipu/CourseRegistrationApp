@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"/>
 
             <TextView
-                android:id="@+id/selectChamber"
+                android:id="@+id/selectTerm"
                 android:layout_width="wrap_content"
                 android:text="Enrolled"
                 android:paddingLeft="8dp"

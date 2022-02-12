@@ -2,4 +2,5 @@
     <string name="app_name">CourseRegistrationApp</string>
     <string name="select_course">Select Course</string>
     <string name="registration">Register</string>
+    <string name="term_one_enrolled">Enrolled  course</string>
 </resources>

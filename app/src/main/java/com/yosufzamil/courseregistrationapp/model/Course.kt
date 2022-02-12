@@ -20,6 +20,14 @@ class Course {
         this.term=term
         this.courseDetails=courseDetails
     }
+    constructor(id:Int,courseId: String?,courseName:String?,prerequisite:String?,term:String?,courseDetails: String?){
+        this.id=id
+        this.courseId=courseId
+        this.courseName=courseName
+        this.prerequisite=prerequisite
+        this.term=term
+        this.courseDetails=courseDetails
+    }
 
     constructor(){
     }
