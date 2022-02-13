@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import com.yosufzamil.courseregistrationapp.model.Course
+import kotlinx.android.synthetic.main.activity_term_one.view.*
 
 class DBHelper (context: Context): SQLiteOpenHelper(context,DATABASE_NAME,null,DATABASE_VAR) {
 
@@ -25,8 +26,6 @@ class DBHelper (context: Context): SQLiteOpenHelper(context,DATABASE_NAME,null,D
         private val COL_COURSE_PREREQUISITE="Prerequisite"
         private val COL_TERM="Term"
         private val COL_COURSE_DETAILS="CourseDescription"
-
-
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -53,11 +52,6 @@ class DBHelper (context: Context): SQLiteOpenHelper(context,DATABASE_NAME,null,D
         db!!.execSQL("DROP TABLE IF EXISTS $TABLE_REGIDTER_COURSE_NAME")
         onCreate(db!!)
     }
-
-
-
-
-
 
     @SuppressLint("Range")
     fun getRegisterCourse(term: String):List<Course>{
@@ -90,27 +84,58 @@ class DBHelper (context: Context): SQLiteOpenHelper(context,DATABASE_NAME,null,D
 
              return registerCourse
         }
-
-    fun getExitedRegisterCourse(courseId: String?): Boolean {
+    fun getExitedRegisterCourse(courseId:String?): Boolean {
         var flag = false
-        val selectQuery="SELECT * FROM $TABLE_REGIDTER_COURSE_NAME WHERE $Col_COURSE_ID=?"
-        val db: SQLiteDatabase =this.writableDatabase
-        val cursor: Cursor =db.rawQuery(selectQuery, arrayOf(courseId))
 
-        Log.e("selct",cursor.toString())
+        Log.e("courseId",courseId.toString())
 
+        when {
+            courseId!!.contains("or") -> {
+                val strs = courseId.split(" or ")
+                val prerequisiteCourseOne=strs[0]
+                val prerequisiteCourseTwo=strs[1]
 
-       // val cursor: Cursor =db.rawQuery(selectQuery, null)
+                val selectQuery="SELECT * FROM $TABLE_REGIDTER_COURSE_NAME WHERE $Col_COURSE_ID=? OR $Col_COURSE_ID=? "
+                val db: SQLiteDatabase =this.writableDatabase
+                val cursor: Cursor =db.rawQuery(selectQuery, arrayOf(prerequisiteCourseOne,prerequisiteCourseTwo))
 
-       if (cursor.moveToFirst() && cursor!=null && cursor.getCount()>0) {
-               flag =true
-            } else {
-               flag =false
+                if (cursor.moveToFirst() && cursor!=null && cursor.getCount()>0) {
+                    flag =true
+                } else {
+                    flag =false
+                }
+
             }
+            courseId!!.contains("and") -> {
+                val strs = courseId.split(" and ")
+                val prerequisiteCourseOne=strs[0]
+                val prerequisiteCourseTwo=strs[1]
+
+                val selectQuery="SELECT * FROM $TABLE_REGIDTER_COURSE_NAME WHERE $Col_COURSE_ID=? AND $Col_COURSE_ID=? "
+                val db: SQLiteDatabase =this.writableDatabase
+                val cursor: Cursor =db.rawQuery(selectQuery, arrayOf(prerequisiteCourseOne,prerequisiteCourseTwo))
+                if (cursor.moveToFirst() && cursor!=null && cursor.getCount()>0) {
+                    flag =true
+                } else {
+                    flag =false
+                }
+
+            }
+            else -> {
+                val selectQuery="SELECT * FROM $TABLE_REGIDTER_COURSE_NAME WHERE $Col_COURSE_ID=?"
+                val db: SQLiteDatabase =this.writableDatabase
+                val cursor: Cursor =db.rawQuery(selectQuery, arrayOf(courseId))
+                if (cursor.moveToFirst() && cursor!=null && cursor.count>0) {
+                    flag =true
+                } else {
+                    flag =false
+                }
+            }
+       }
+
 
         return flag
     }
-
     fun addRegisterCourse(course: Course):Boolean {
         var flag = false
         val db:SQLiteDatabase=this.writableDatabase
@@ -139,7 +164,7 @@ class DBHelper (context: Context): SQLiteOpenHelper(context,DATABASE_NAME,null,D
     {
 
         val db:SQLiteDatabase=this.writableDatabase
-       var result= db.delete(TABLE_NAME, "$Col_COURSE_ID=?", arrayOf(courseId))
+       var result= db.delete(TABLE_REGIDTER_COURSE_NAME, "$Col_COURSE_ID=?", arrayOf(courseId))
         Log.e("result",result.toString())
 
         //if(result>0){
@@ -216,8 +241,7 @@ class DBHelper (context: Context): SQLiteOpenHelper(context,DATABASE_NAME,null,D
 
      }  */
 
-
-   /* fun updatePerson(course: Course): Int {
+    /* fun updatePerson(course: Course): Int {
 
         val db:SQLiteDatabase=this.writableDatabase
         val values=ContentValues()
@@ -235,7 +259,7 @@ class DBHelper (context: Context): SQLiteOpenHelper(context,DATABASE_NAME,null,D
 
     }  */
 
- /*   fun deletePerson(course: Course)
+   /*   fun deletePerson(course: Course)
     {
 
         val db:SQLiteDatabase=this.writableDatabase
