@@ -51,20 +51,31 @@ class AvailableCourseDetails : AppCompatActivity() {
 
               }else{
                   if(course.prerequisite=="None"){
-                      var result=db.exitedRegisterCourse(course.courseId)
+                      var result=db.getExitedRegisterCourse(course.courseId)
                       if(result){
                           Toast.makeText(this,"Sorry you can't register.this course  is already registered",Toast.LENGTH_SHORT).show()
 
                       }else{
-                          db.addRegisterCourse(course)
+                         var insert=db.addRegisterCourse(course)
+                          if(insert){
+                              Toast.makeText(this,"Your Registration is successfully!!",Toast.LENGTH_SHORT).show()
+                          }else{
+                              Toast.makeText(this,"Something is wrong",Toast.LENGTH_SHORT).show()
+                          }
                       }
 
                   }else
                   {
-                      var result=db.exitedRegisterCourse(course.prerequisite)
+                      var result=db.getExitedRegisterCourse(course.prerequisite)
 
                       if(result){
-                          db.addRegisterCourse(course)
+
+                          var insert= db.addRegisterCourse(course)
+                          if(insert){
+                              Toast.makeText(this,"Your Registration is successfully!!",Toast.LENGTH_SHORT).show()
+                          }else{
+                              Toast.makeText(this,"Something is wrong",Toast.LENGTH_SHORT).show()
+                          }
                       }else{
                           Toast.makeText(this,"you have take first prerequisite course then you can register for this course",Toast.LENGTH_SHORT).show()
 
@@ -88,9 +99,10 @@ class AvailableCourseDetails : AppCompatActivity() {
 
               } else {
                   if (course.prerequisite == "None") {
-                      var result = db.exitedRegisterCourse(course.courseId)
+                      var result = db.getExitedRegisterCourse(course.courseId)
+                      Log.e("result",result.toString())
 
-                     /* if (result) {
+                      if (result) {
                           Toast.makeText(
                               this,
                               "Sorry you can't register.this course  is already registered",
@@ -98,14 +110,42 @@ class AvailableCourseDetails : AppCompatActivity() {
                           ).show()
 
                       } else {
-                          db.addRegisterCourse(course)
-                      }  */
+                         var insert= db.addRegisterCourse(course)
+                          if(insert){
+                              Toast.makeText(
+                                      this,
+                                      "Your registration is successfully!!",
+                                      Toast.LENGTH_SHORT
+                              ).show()
+                          }else{
+                              Toast.makeText(
+                                      this,
+                                      "Something is wrong!!",
+                                      Toast.LENGTH_SHORT
+                              ).show()
+                          }
+
+
+                      }
 
                   } else {
-                      var result = db.exitedRegisterCourse(course.prerequisite)
+                      var result = db.getExitedRegisterCourse(course.prerequisite)
 
                       if (result) {
-                          db.addRegisterCourse(course)
+                         var insert=db.addRegisterCourse(course)
+                          if(insert){
+                              Toast.makeText(
+                                      this,
+                                      "Your registration is successfully!!",
+                                      Toast.LENGTH_SHORT
+                              ).show()
+                          }else{
+                              Toast.makeText(
+                                      this,
+                                      "Something is wrong!!",
+                                      Toast.LENGTH_SHORT
+                              ).show()
+                          }
                       } else {
                           Toast.makeText(
                               this,
@@ -119,13 +159,6 @@ class AvailableCourseDetails : AppCompatActivity() {
 
               }
           }
-
-
-
-
-
-
-
       }
 
     }

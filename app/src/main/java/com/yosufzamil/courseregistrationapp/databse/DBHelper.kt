@@ -91,27 +91,28 @@ class DBHelper (context: Context): SQLiteOpenHelper(context,DATABASE_NAME,null,D
              return registerCourse
         }
 
-    fun exitedRegisterCourse(courseId: String?): Boolean {
+    fun getExitedRegisterCourse(courseId: String?): Boolean {
         var flag = false
-        val selectQuery="SELECT * FROM $TABLE_REGIDTER_COURSE_NAME WHERE $Col_COURSE_ID=$courseId"
+        val selectQuery="SELECT * FROM $TABLE_REGIDTER_COURSE_NAME WHERE $Col_COURSE_ID=?"
         val db: SQLiteDatabase =this.writableDatabase
-        val cursor: Cursor =db.rawQuery(selectQuery, null)
+        val cursor: Cursor =db.rawQuery(selectQuery, arrayOf(courseId))
 
         Log.e("selct",cursor.toString())
 
 
        // val cursor: Cursor =db.rawQuery(selectQuery, null)
 
-    /*    if (cursor.moveToFirst() && cursor!=null && cursor.getCount()>0) {
+       if (cursor.moveToFirst() && cursor!=null && cursor.getCount()>0) {
                flag =true
             } else {
                flag =false
-            }  */
+            }
 
         return flag
     }
-    fun addRegisterCourse(course: Course) {
 
+    fun addRegisterCourse(course: Course):Boolean {
+        var flag = false
         val db:SQLiteDatabase=this.writableDatabase
         val values= ContentValues()
         values.put(Col_ID,course.id)
@@ -120,8 +121,19 @@ class DBHelper (context: Context): SQLiteOpenHelper(context,DATABASE_NAME,null,D
         values.put(COL_COURSE_PREREQUISITE,course.prerequisite)
         values.put(COL_TERM, course.term)
         values.put(COL_COURSE_DETAILS,course.courseDetails)
-        db.insert(TABLE_REGIDTER_COURSE_NAME, null,values)
+       var result= db.insert(TABLE_REGIDTER_COURSE_NAME, null,values)
+
+        Log.e("database",result.toString())
+
+        if(result>0){
+             flag=true
+
+        }else{
+            flag=false
+
+        }
         db.close()
+        return flag
     }
     fun deleteRegisterCourse(courseId:String)
     {
