@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import com.yosufzamil.courseregistrationapp.R
@@ -31,7 +32,7 @@ class TermOneActivity : AppCompatActivity() {
 
     private fun fetchData(){
 
-        courses=db.getRegisterCourse("1")
+        courses=db.getRegisterCourse(1)
 
         Log.e("course size check",courses.size.toString())
 
@@ -43,13 +44,61 @@ class TermOneActivity : AppCompatActivity() {
             rvEnrolledCourseTermOne.adapter = adapter
 
             adapter.onDelete={modelList,position->
-                db.deleteRegisterCourse(modelList[position].courseId.toString())
+                var result=db.getExitedInPrerequisiteColumn(modelList[position].courseId.toString())
+
+                Log.e("result checking", result.courseId.toString())
+                if(result!=null){
+                    Log.e("dlete option","helloone")
+                    val builder = AlertDialog.Builder(this)
+                    builder.setTitle("Warning!!")
+                    builder.setMessage("If you delete this course so remove will be also ${result.courseId.toString()}")
+//builder.setPositiveButton("OK", DialogInterface.OnClickListener(function = x))
+
+                    builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+                       var prerequisiteCourseDelete= db.deleteRegisterCourse(result.courseId.toString())
+                        var prerequisiteCourseDeleteOne= db.deleteRegisterCourse(modelList[position].courseId.toString())
+                        if(prerequisiteCourseDelete && prerequisiteCourseDeleteOne){
+                            modelList.removeAt(position)
+                            adapter.notifyDataSetChanged()
+                            Toast.makeText(applicationContext,
+                                    "Delete successfully!!", Toast.LENGTH_SHORT).show()
+                        }
+
+                    }
+
+                    builder.setNegativeButton(android.R.string.no) { dialog, which ->
+                        Toast.makeText(applicationContext,
+                                android.R.string.no, Toast.LENGTH_SHORT).show()
+                    }
+
+                   /* builder.setNeutralButton("Maybe") { dialog, which ->
+                        Toast.makeText(applicationContext,
+                                "Maybe", Toast.LENGTH_SHORT).show()
+                    }  */
+                    builder.show()
+                   /* builder.setNeutralButton("Maybe") { dialog, which ->
+                        Toast.makeText(applicationContext,
+                                "Maybe", Toast.LENGTH_SHORT).show()
+                    }  */
+                    // Create the AlertDialog
+
+                   // alertDialog.show()
+                   // Toast.makeText(this,"If you delete this course so remove also ${result.courseId}",Toast.LENGTH_SHORT).show()
+                }else{
+                    Log.e("dlete option","hello")
+                    var prerequisiteCourseDelete= db.deleteRegisterCourse(modelList[position].courseId.toString())
                     modelList.removeAt(position)
                     adapter.notifyDataSetChanged()
+                }
+               // if(modelList[position].prerequisiteOne.toString()==)
+
+
             }
         }else{
             emtyMsg.visibility=View.VISIBLE
         }
 
     }
+
+
 }

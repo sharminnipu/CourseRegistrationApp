@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import com.yosufzamil.courseregistrationapp.R
 import com.yosufzamil.courseregistrationapp.adapter.TermAdapter
@@ -28,7 +29,7 @@ class TermTwoActivity : AppCompatActivity() {
 
     private fun fetchData(){
 
-        courses=db.getRegisterCourse("2")
+        courses=db.getRegisterCourse(2)
 
         Log.e("course size check",courses.size.toString())
 
@@ -40,9 +41,13 @@ class TermTwoActivity : AppCompatActivity() {
             rvEnrolledCourseTermTwo.adapter = adapter
 
             adapter.onDelete={modelList,position->
-                db.deleteRegisterCourse(modelList[position].courseId.toString())
-                modelList.removeAt(position)
-                adapter.notifyDataSetChanged()
+                var result=db.deleteRegisterCourse(modelList[position].courseId.toString())
+                if(result){
+                    modelList.removeAt(position)
+                    adapter.notifyDataSetChanged()
+                    Toast.makeText(this,"Delete successfully!!",Toast.LENGTH_SHORT).show()
+                }
+
             }
         }else{
             emtyMsg2.visibility= View.VISIBLE

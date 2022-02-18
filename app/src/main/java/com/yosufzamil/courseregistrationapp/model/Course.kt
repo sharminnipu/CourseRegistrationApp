@@ -7,25 +7,25 @@ class Course {
     var id:Int=0
     var courseId:String?=null
     var courseName:String?=null
-    var prerequisite:String?=null
-    var term:String?=null
+    var term:Int=0
+    var prerequisiteOne:String?=null
+    var prerequisiteTwo:String?=null
+    var status:Int=0
+    var year:Int=0
+    var mandatory:Int=0
     var courseDetails:String?=null
 
 
 
-    constructor(courseId: String?,courseName:String?,prerequisite:String?,term:String?,courseDetails: String?) {
+    constructor(courseId: String?,courseName:String?,term:Int,prerequisiteOne:String?,prerequisiteTwo:String?,status:Int,year:Int,mandatory:Int,courseDetails: String?) {
        this.courseId=courseId
         this.courseName=courseName
-        this.prerequisite=prerequisite
         this.term=term
-        this.courseDetails=courseDetails
-    }
-    constructor(id:Int,courseId: String?,courseName:String?,prerequisite:String?,term:String?,courseDetails: String?){
-        this.id=id
-        this.courseId=courseId
-        this.courseName=courseName
-        this.prerequisite=prerequisite
-        this.term=term
+        this.prerequisiteOne=prerequisiteOne
+        this.prerequisiteTwo=prerequisiteTwo
+        this.status=status
+        this.year=year
+        this.mandatory=mandatory
         this.courseDetails=courseDetails
     }
 
