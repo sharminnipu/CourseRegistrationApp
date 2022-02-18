@@ -52,7 +52,6 @@ class TermOneActivity : AppCompatActivity() {
                     val builder = AlertDialog.Builder(this)
                     builder.setTitle("Warning!!")
                     builder.setMessage("If you delete this course so remove will be also ${result.courseId.toString()}")
-//builder.setPositiveButton("OK", DialogInterface.OnClickListener(function = x))
 
                     builder.setPositiveButton(android.R.string.yes) { dialog, which ->
                        var prerequisiteCourseDelete= db.deleteRegisterCourse(result.courseId.toString())
@@ -63,36 +62,19 @@ class TermOneActivity : AppCompatActivity() {
                             Toast.makeText(applicationContext,
                                     "Delete successfully!!", Toast.LENGTH_SHORT).show()
                         }
-
                     }
 
                     builder.setNegativeButton(android.R.string.no) { dialog, which ->
                         Toast.makeText(applicationContext,
                                 android.R.string.no, Toast.LENGTH_SHORT).show()
                     }
-
-                   /* builder.setNeutralButton("Maybe") { dialog, which ->
-                        Toast.makeText(applicationContext,
-                                "Maybe", Toast.LENGTH_SHORT).show()
-                    }  */
                     builder.show()
-                   /* builder.setNeutralButton("Maybe") { dialog, which ->
-                        Toast.makeText(applicationContext,
-                                "Maybe", Toast.LENGTH_SHORT).show()
-                    }  */
-                    // Create the AlertDialog
-
-                   // alertDialog.show()
-                   // Toast.makeText(this,"If you delete this course so remove also ${result.courseId}",Toast.LENGTH_SHORT).show()
                 }else{
                     Log.e("dlete option","hello")
                     var prerequisiteCourseDelete= db.deleteRegisterCourse(modelList[position].courseId.toString())
                     modelList.removeAt(position)
                     adapter.notifyDataSetChanged()
                 }
-               // if(modelList[position].prerequisiteOne.toString()==)
-
-
             }
         }else{
             emtyMsg.visibility=View.VISIBLE

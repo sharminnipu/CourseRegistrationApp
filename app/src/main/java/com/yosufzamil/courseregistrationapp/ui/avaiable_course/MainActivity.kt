@@ -134,10 +134,7 @@ class MainActivity : AppCompatActivity() {
             val courseTwo = Course(
                     "CS263", "Computer Architecture and Organization", 2, "CS255", "None", 1, 2, 1,
                     "Coding is telling a computer what to do, in a way that, with a bit of translation, it can understand. You give computers instructions in what is known as 'code', in a similar way to how you might have a recipe for how to cook something.")
-           val result= db.addRegisterCourse(courseOne)
-            if(result){
-                Toast.makeText(this,"yes register two",Toast.LENGTH_SHORT).show()
-            }
+            db.addRegisterCourse(courseOne)
             db.addRegisterCourse(courseTwo)
             var editor = sharedPreference.edit()
             editor.putBoolean("insertedMandatoryCourseInDB", true)

@@ -23,7 +23,6 @@ class DBHelper (context: Context): SQLiteOpenHelper(context,DATABASE_NAME,null,D
         private val Col_ID="Id"
         private val Col_COURSE_ID="CourseId"
         private val Col_COURSE_NAME="CourseName"
-      //  private val COL_COURSE_PREREQUISITE="Prerequisite"
         private val COL_COURSE_PREREQUISITE_ONE="Prerequisite_One"
         private val COL_COURSE_PREREQUISITE_TWO="Prerequisite_Two"
         private val COL_COURSE_STATUS="Status"
@@ -31,6 +30,8 @@ class DBHelper (context: Context): SQLiteOpenHelper(context,DATABASE_NAME,null,D
         private val COL_COURSE_DETAILS="CourseDescription"
         private val COL_YEAR="Year"
         private val COL_MANDATORY="Mandatory"
+        private val a="a"
+        private val b="b"
 
 
     }
@@ -54,10 +55,6 @@ class DBHelper (context: Context): SQLiteOpenHelper(context,DATABASE_NAME,null,D
 
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-
-       // val DROP_TABLE_DEPT = "DROP TABLE IF EXISTS $TABLE_NAME"
-       /// val DROP_TABLE_ITEM = "DROP TABLE IF EXISTS $TABLE_REGIDTER_COURSE_NAME"
-      //  db!!.execSQL(DROP_TABLE_DEPT + DROP_TABLE_ITEM)
 
         db!!.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
         db!!.execSQL("DROP TABLE IF EXISTS $TABLE_REGIDTER_COURSE_NAME")
@@ -89,13 +86,8 @@ class DBHelper (context: Context): SQLiteOpenHelper(context,DATABASE_NAME,null,D
 
                     registerCourse.add(course)
 
-
-
                 } while (cursor.moveToNext())
-
-
             }
-
              return registerCourse
         }
     fun getExitedRegisterCourse(courseId:String?): Boolean {
@@ -115,10 +107,6 @@ class DBHelper (context: Context): SQLiteOpenHelper(context,DATABASE_NAME,null,D
         val db: SQLiteDatabase =this.writableDatabase
         val cursor: Cursor =db.rawQuery(selectQuery, arrayOf(courseId,courseId))
         if(cursor.moveToFirst() && cursor!=null && cursor.count>0){
-
-
-           // course = Course(
-                   // cursor.getInt(cursor.getColumnIndex(Col_ID)),
             course.id=cursor.getInt(cursor.getColumnIndex(Col_ID))
             course.courseId = cursor.getString(cursor.getColumnIndex(Col_COURSE_ID))
             course.courseName = cursor.getString(cursor.getColumnIndex(Col_COURSE_NAME))
@@ -130,8 +118,7 @@ class DBHelper (context: Context): SQLiteOpenHelper(context,DATABASE_NAME,null,D
             course.mandatory=cursor.getInt(cursor.getColumnIndex(COL_MANDATORY))
             course.courseDetails = cursor.getString(cursor.getColumnIndex(COL_COURSE_DETAILS))
             cursor.close()
-          //  )
-            Log.e("check for data",course.courseId.toString())
+
         }else{
             Log.e("check for data",course.courseId.toString())
         }
@@ -141,15 +128,9 @@ class DBHelper (context: Context): SQLiteOpenHelper(context,DATABASE_NAME,null,D
     @SuppressLint("Range")
     fun getPrerequisiteCompletedCourseExit(courseIdOne:String?, courseIdTwo: String?, status: Int): Boolean {
         var flag = false
-
-      //  Log.e("courseId",courseId.toString())
-
+            //1=Single ,2=or option 3=and option
         when (status) {
             1 -> {
-                //  val strs = courseId.split(" or ")
-                // val prerequisiteCourseOne=strs[0]
-                // val prerequisiteCourseTwo=strs[1]
-
                 val selectQuery="SELECT * FROM $TABLE_REGIDTER_COURSE_NAME WHERE $Col_COURSE_ID=? "
                 val db: SQLiteDatabase =this.writableDatabase
                 val cursor: Cursor =db.rawQuery(selectQuery, arrayOf(courseIdOne))
@@ -158,35 +139,17 @@ class DBHelper (context: Context): SQLiteOpenHelper(context,DATABASE_NAME,null,D
 
             }
             2 -> {
-                //  val strs = courseId.split(" or ")
-                // val prerequisiteCourseOne=strs[0]
-                // val prerequisiteCourseTwo=strs[1]
-
                 val selectQuery="SELECT * FROM $TABLE_REGIDTER_COURSE_NAME WHERE $Col_COURSE_ID=? OR $Col_COURSE_ID=?"
                 val db: SQLiteDatabase =this.writableDatabase
                 val cursor: Cursor =db.rawQuery(selectQuery, arrayOf(courseIdOne,courseIdTwo))
-
                 flag = cursor.moveToFirst() && cursor!=null && cursor.count >0
-
             }
             3 -> {
-                val  registerCourse=ArrayList<Course>()/* val selectQuery="SELECT * FROM $TABLE_REGIDTER_COURSE_NAME WHERE $Col_COURSE_ID=? AND $Col_COURSE_ID=?"
-                val db: SQLiteDatabase =this.writableDatabase
-                val cursor: Cursor =db.rawQuery(selectQuery, arrayOf(courseIdOne,courseIdTwo))  */
-                // val strs = courseId.split(" and ")
-                //  val prerequisiteCourseOne=strs[0]
-                // val prerequisiteCourseTwo=strs[1]
-               /* SELECT *
-                        FROM `nipu_table`
-                        WHERE (course_id LIKE '%CS163%')
-                AND (course_id LIKE '%CS163%') */
-               val selectQuery="SELECT * FROM $TABLE_REGIDTER_COURSE_NAME WHERE $Col_COURSE_ID IN('$courseIdOne','$courseIdTwo')"
-               //val selectQuery="SELECT * FROM $TABLE_REGIDTER_COURSE_NAME WHERE ($Col_COURSE_ID LIKE '%$courseIdOne%') AND ($Col_COURSE_ID LIKE '%$courseIdTwo%') "
-               // val selectQuery="SELECT * FROM $TABLE_REGIDTER_COURSE_NAME WHERE $Col_COURSE_ID=? AND $Col_COURSE_ID=?"
+                val  registerCourse=ArrayList<Course>()
+                val selectQuery="SELECT * FROM $TABLE_REGIDTER_COURSE_NAME WHERE $Col_COURSE_ID IN('$courseIdOne','$courseIdTwo')"
                 val db: SQLiteDatabase =this.writableDatabase
                 val cursor: Cursor =db.rawQuery(selectQuery, null)
                 if(cursor.moveToFirst()) {
-
                     do {
                         val course = Course()
                         course.id=cursor.getInt(cursor.getColumnIndex(Col_ID))
@@ -201,12 +164,7 @@ class DBHelper (context: Context): SQLiteOpenHelper(context,DATABASE_NAME,null,D
                         course.courseDetails = cursor.getString(cursor.getColumnIndex(COL_COURSE_DETAILS))
 
                         registerCourse.add(course)
-
-
-
                     } while (cursor.moveToNext())
-
-
                 }
 
                 if(registerCourse.size==2){
@@ -214,11 +172,7 @@ class DBHelper (context: Context): SQLiteOpenHelper(context,DATABASE_NAME,null,D
                     Log.e("course checking",registerCourse[0].courseId.toString())
                     Log.e("course checking2",registerCourse[1].courseId.toString())
                 }
-
-                //val cursor1: Cursor =db.rawQuery(selectQuery, arrayOf(courseIdTwo))
-
-               // flag = cursor.moveToFirst() && cursor!=null && cursor.count >0
-               // Log.e("and",flag.toString())
+                Log.e("and",flag.toString())
             }
         }
 
@@ -229,7 +183,6 @@ class DBHelper (context: Context): SQLiteOpenHelper(context,DATABASE_NAME,null,D
         var flag = false
         val db:SQLiteDatabase=this.writableDatabase
         val values= ContentValues()
-       // values.put(Col_ID,course.id)
         values.put(Col_COURSE_ID,course.courseId)
         values.put(Col_COURSE_NAME,course.courseName)
         values.put(COL_TERM, course.term)
@@ -255,7 +208,6 @@ class DBHelper (context: Context): SQLiteOpenHelper(context,DATABASE_NAME,null,D
         Log.e("result",result.toString())
 
         flag = result>0
-
         db.close()
         return flag
     }
@@ -288,7 +240,6 @@ class DBHelper (context: Context): SQLiteOpenHelper(context,DATABASE_NAME,null,D
 
                 } while (cursor.moveToNext())
 
-
             }
             return allCourse
 
@@ -310,55 +261,5 @@ class DBHelper (context: Context): SQLiteOpenHelper(context,DATABASE_NAME,null,D
         db.insert(TABLE_NAME, null,values)
 
         db.close()
-
     }
-
-    /* fun addCourse(course: Course) {
-
-         val db:SQLiteDatabase=this.writableDatabase
-         val values= ContentValues()
-
-         values.put(Col_COURSE_ID,course.courseId)
-         values.put(Col_COURSE_NAME,course.courseName)
-         values.put(COL_COURSE_PREREQUISITE,course.prerequisite)
-         values.put(COL_TERM, course.term)
-         values.put(COL_COURSE_DETAILS,course.courseDetails)
-
-         db.insert(TABLE_NAME, null,values)
-
-         db.close()
-
-
-     }  */
-
-    /* fun updatePerson(course: Course): Int {
-
-        val db:SQLiteDatabase=this.writableDatabase
-        val values=ContentValues()
-
-        values.put(Col_COURSE_ID,course.courseId)
-        values.put(Col_COURSE_NAME,course.courseName)
-        values.put(COL_COURSE_PREREQUISITE,course.prerequisite)
-        values.put(COL_TERM, course.term)
-        values.put(COL_COURSE_DETAILS,course.courseDetails)
-
-        return  db.update(TABLE_NAME,values, "$Col_ID=?", arrayOf(course.id))
-
-        //  db.close()
-
-
-    }  */
-
-   /*   fun deletePerson(course: Course)
-    {
-
-        val db:SQLiteDatabase=this.writableDatabase
-
-        db.delete(TABLE_NAME, "$Col_ID=?", arrayOf(course.id))
-
-        db.close()
-
-
-    }  */
-
 }
