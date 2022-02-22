@@ -46,21 +46,21 @@ class TermOneActivity : AppCompatActivity() {
             adapter.onDelete={modelList,position->
                 var result=db.getExitedInPrerequisiteColumn(modelList[position].courseId.toString())
 
-                Log.e("result checking", result.courseId.toString())
-                if(result!=null){
+                Log.e("result checking", result.toString())
+                if(result.courseId!=null){
                     Log.e("dlete option","helloone")
                     val builder = AlertDialog.Builder(this)
                     builder.setTitle("Warning!!")
                     builder.setMessage("If you delete this course so remove will be also ${result.courseId.toString()}")
 
                     builder.setPositiveButton(android.R.string.yes) { dialog, which ->
-                       var prerequisiteCourseDelete= db.deleteRegisterCourse(result.courseId.toString())
-                        var prerequisiteCourseDeleteOne= db.deleteRegisterCourse(modelList[position].courseId.toString())
-                        if(prerequisiteCourseDelete && prerequisiteCourseDeleteOne){
+                       var takeCourseDelete= db.deleteRegisterCourse(result.courseId.toString())
+                        var prerequisiteCourseDelete= db.deleteRegisterCourse(modelList[position].courseId.toString())
+                        if(prerequisiteCourseDelete && takeCourseDelete){
                             modelList.removeAt(position)
                             adapter.notifyDataSetChanged()
                             Toast.makeText(applicationContext,
-                                    "Delete successfully!!", Toast.LENGTH_SHORT).show()
+                                    "Delete successfully course!!", Toast.LENGTH_SHORT).show()
                         }
                     }
 
@@ -70,10 +70,15 @@ class TermOneActivity : AppCompatActivity() {
                     }
                     builder.show()
                 }else{
-                    Log.e("dlete option","hello")
+                    Log.e("delete option","hello")
                     var prerequisiteCourseDelete= db.deleteRegisterCourse(modelList[position].courseId.toString())
-                    modelList.removeAt(position)
-                    adapter.notifyDataSetChanged()
+                    if(prerequisiteCourseDelete){
+                        modelList.removeAt(position)
+                        adapter.notifyDataSetChanged()
+                        Toast.makeText(applicationContext,
+                                "Delete successfully course!!", Toast.LENGTH_SHORT).show()
+                    }
+
                 }
             }
         }else{
